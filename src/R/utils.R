@@ -1,9 +1,7 @@
-source("src/R/config.R")
-
+source("R/config.R")
 
 prepare_gis_receiver_locations <- function(locations_path, coast) {
-    #'Read the locations of all hydrophones and add prepare it to follow on
-    #'the same projection as a given one.
+    #'Read the locations of all hydrophones and set up projection
     #'@param locations_path A string
     #'@return A dataframe
 
@@ -16,7 +14,6 @@ prepare_gis_receiver_locations <- function(locations_path, coast) {
     st_transform(locs, crs = st_crs(coast))     # to UTM 31N / WGS84
   return(locs)
 }
-
 
 fetch_species <- function(data, id_species) {
     #' Fetches all rows for a particular species
@@ -266,7 +263,20 @@ build_graph_matrix <- function(data,
       select(-n)
 
   }
-
   return(data)
-
 }
+
+rbind_metric <-
+  function(metric_data,
+           monthly_metric_data_vector,
+           individual_name,
+           month_name) {
+    df <-
+      data.frame(metric_name = monthly_metric_data_vector,
+                 ind_name = individual_name,
+                 period = month_name)
+    metric_data <-
+      rbind(metric_data, df) %>% mutate_if(is.numeric, round, 2)
+    return(metric_data)
+
+  }
