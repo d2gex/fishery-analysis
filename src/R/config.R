@@ -35,11 +35,6 @@ river <- st_read(river_path)
 port <- st_read(port_path)
 river_muga <- st_read(river_muga_path)
 
-# Read data and prepare matrix of detections
-locs = prepare_gis_receiver_locations(receiver_loc_path, coast)
-data <- read.csv(lubina_detection_path)
-data <- data %>% mutate(station=ifelse(station == "",  station_folder, station))
-
 # Set the boundaries of the data analsyis
 start <- "2020-09-01 00:00"
 end <- "2022-04-27 00:00"
