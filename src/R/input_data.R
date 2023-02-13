@@ -1,7 +1,4 @@
-source("R/utils.R")
-source("R/detection_views.R")
-source("R/graph_utils.R")
-
+source("src/R/utils.R")
 
 rbind_metric <-
   function(metric_data,

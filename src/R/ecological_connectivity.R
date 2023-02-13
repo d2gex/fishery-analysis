@@ -1,4 +1,5 @@
-source("R/input_data.R")
+source("src/R/input_data.R")
+
 # Generate Loops plot
 only_loops_g <- build_graph_matrix(
   data,
@@ -16,7 +17,7 @@ only_loops_g <- build_graph_matrix(
   )) %>%
   group_by(zone) %>%
   summarise(detections = n()) %>%
-  mutate(percentage = round ((detections / sum(detections)) * 100, 2)) %>%
+  mutate(percentage = round((detections / sum(detections)) * 100, 2)) %>%
   arrange(desc(percentage)) %>%
   mutate(cum = cumsum(percentage))
 
@@ -75,7 +76,7 @@ no_loops_g <- build_graph_matrix(
   ) %>%
   group_by(zone_interaction) %>%
   summarise(detections = n()) %>%
-  mutate(percentage = round ((detections / sum(detections)) * 100, 2)) %>%
+  mutate(percentage = round((detections / sum(detections)) * 100, 2)) %>%
   arrange(desc(percentage)) %>%
   mutate(cum = cumsum(percentage))
 
@@ -83,11 +84,11 @@ no_loops_g <- build_graph_matrix(
 # Draw sustain detections line plot
 #-------------------------------------------
 
-detections <- slide_data_by_date_interval (data,
-                                           start,
-                                           end,
-                                           granularity = 'months',
-                                           as_list = FALSE)
+detections <- slide_data_by_date_interval(data,
+                                          start,
+                                          end,
+                                          granularity = 'months',
+                                          as_list = FALSE)
 
 detections <- detections %>%
   select(period) %>%
@@ -97,11 +98,11 @@ detections <- detections %>%
 
 detections$month_order = 1:nrow(detections)
 detections <- detections %>%
-  mutate(percentage = round ((detections / sum(detections)) * 100, 2)) %>%
+  mutate(percentage = round((detections / sum(detections)) * 100, 2)) %>%
   arrange(desc(percentage)) %>%
   mutate(cum = cumsum(percentage))
 
-det_to_represent <- detections[1:nrow(detections) - 1, ] %>%
+det_to_represent <- detections[1:nrow(detections) - 1,] %>%
   mutate(months =
            paste(str_sub(period, 3, 4),
                  month.abb[as.numeric(as.character(str_sub(period, 6, 7)))],
@@ -112,16 +113,16 @@ detections_time_plot <-
   ggplot(det_to_represent, aes(x = reorder(months, month_order),
                                y = detections,
                                group = 1)) +
-  ggtitle("B) Monthly detections") +
-  geom_line(color = "lightblue") +
-  geom_point(color = "violetred") +
-  theme_bw() +
-  xlab("Months") +
-  ylab("Num Detections") +
-  theme(
-    axis.text.x = element_text(angle = 90, hjust = 1),
-    plot.title = element_text(size = 8, hjust = 0.5, face = "bold")
-  )
+    ggtitle("B) Monthly detections") +
+    geom_line(color = "lightblue") +
+    geom_point(color = "violetred") +
+    theme_bw() +
+    xlab("Months") +
+    ylab("Num Detections") +
+    theme(
+      axis.text.x = element_text(angle = 90, hjust = 1),
+      plot.title = element_text(size = 8, hjust = 0.5, face = "bold")
+    )
 
 #-----------------------------------------------------
 # Draw residency and transition graphs by zones
@@ -141,10 +142,10 @@ zone_stations <- locs %>%
 
 node_size_df <- no_loops_g %>%
   filter(
-    if_any(zone_interaction,  ~ str_detect(., "M-M")) |
-      if_any(zone_interaction,  ~ str_detect(., "G-G")) |
-      if_any(zone_interaction,  ~ str_detect(., "C-C")) |
-      if_any(zone_interaction,  ~ str_detect(., "B-B"))
+    if_any(zone_interaction, ~str_detect(., "M-M")) |
+      if_any(zone_interaction, ~str_detect(., "G-G")) |
+      if_any(zone_interaction, ~str_detect(., "C-C")) |
+      if_any(zone_interaction, ~str_detect(., "B-B"))
   ) %>%
   mutate(zone_interaction = str_replace(zone_interaction, "M-M", "M")) %>%
   mutate(zone_interaction = str_replace(zone_interaction, "G-G", "G")) %>%
@@ -163,23 +164,23 @@ node_size_df <- merge(node_size_df, zone_loops, all = TRUE)
 node_size_df <- node_size_df %>%
   group_by(zone) %>%
   summarise(detections = sum(detections)) %>%
-  mutate(percentage = round ((detections / sum(detections)) * 100, 2)) %>%
+  mutate(percentage = round((detections / sum(detections)) * 100, 2)) %>%
   arrange(desc(percentage)) %>%
   mutate(cum = cumsum(percentage))
 
 # --> get % edges weight
 edge_weight_df <- no_loops_g %>%
   filter(
-    !if_any(zone_interaction,  ~ str_detect(., "M-M")) &
-      !if_any(zone_interaction,  ~ str_detect(., "G-G")) &
-      !if_any(zone_interaction,  ~ str_detect(., "C-C")) &
-      !if_any(zone_interaction,  ~ str_detect(., "B-B"))
+    !if_any(zone_interaction, ~str_detect(., "M-M")) &
+      !if_any(zone_interaction, ~str_detect(., "G-G")) &
+      !if_any(zone_interaction, ~str_detect(., "C-C")) &
+      !if_any(zone_interaction, ~str_detect(., "B-B"))
   ) %>%
   select(zone_interaction, detections) %>%
   rename(zone = zone_interaction) %>%
   group_by(zone) %>%
   summarise(detections = sum(detections)) %>%
-  mutate(percentage = round ((detections / sum(detections)) * 100, 2)) %>%
+  mutate(percentage = round((detections / sum(detections)) * 100, 2)) %>%
   arrange(desc(percentage)) %>%
   mutate(cum = cumsum(percentage))
 
