@@ -21,13 +21,14 @@ INPUT_DATA_PATH <- INPUT_DATA_2020_2022
 RECEIVER_COOR_CRS <- "+proj=longlat +datum=WGS84 +no_defs"
 
 
-# Path to shapefiles
+# Path to shapefiles and csvs
 coast_path <- file.path(GIS_DATA_PATH, "coast/coast_cat_fr.shp")
 river_path <- file.path(GIS_DATA_PATH, "coast/coast_cat_fr_rivers_3.shp")
 port_path <- file.path(GIS_DATA_PATH, "coast/coast_cat_fr_port_3.shp")
 river_muga_path <- file.path(GIS_DATA_PATH, "coast/riu_muga.shp")
 receiver_loc_path <- file.path(INPUT_DATA_PATH, "resmed_receiver_locations.csv")
 lubina_detection_path <- file.path(INPUT_DATA_PATH, "lubina_detections.csv")
+sprat_data_path <- file.path(DATA_PATH, "bits_survey/sprat_bits.csv")
 
 # Read shapefiels
 coast <- st_read(coast_path)
