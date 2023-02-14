@@ -4,10 +4,10 @@ library(ggraph)
 library(sf)
 library(dplyr)
 library(tidyr)
-library(R6)
 library(gridExtra)
 library(stringr)
-library(zeallot)
+library(ggpubr)
+library(ggVennDiagram)
 
 # Define paths of the system
 ROOT_PATH = getwd()
