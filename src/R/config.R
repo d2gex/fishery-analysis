@@ -11,7 +11,7 @@ library(ggVennDiagram)
 
 # Define paths of the system
 ROOT_PATH = getwd()
-DATA_PATH = file.path(ROOT_PATH, 'data')
+DATA_PATH = file.path(dirname(ROOT_PATH), 'data')
 ORIGINAL_DATA_PATH = file.path(DATA_PATH, 'originals')
 GIS_DATA_PATH = file.path(DATA_PATH, "gis_data")
 RESMED_DATA_PATH = file.path(DATA_PATH, "res_med")
